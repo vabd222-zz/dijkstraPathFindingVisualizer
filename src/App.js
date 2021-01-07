@@ -1,23 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import PathFindingVisualizer from "./pathFindingVisualizer.jsx";
+
+function hello(){
+
+  const node =  document.getElementsByClassName("node");
+  for(let i=0; i<node.length; i++){
+    node[i].style.backgroundColor==="red"?  node[i].style.backgroundColor="yellow": node[i].style.backgroundColor="red";
+  }
+
+ 
+
+  
+  
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <PathFindingVisualizer/>
     </div>
   );
 }
