@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import PathFindingVisualizer from "./pathFindingVisualizer.jsx";
 
+
 function hello(){
 
   const node =  document.getElementsByClassName("node");
@@ -17,7 +18,7 @@ function hello(){
 
 function App() {
   return (
-    <div>
+    <div className="container">
       <PathFindingVisualizer/>
     </div>
   );

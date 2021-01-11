@@ -1,97 +1,125 @@
 import React, { Component } from "react";
-import {djitskra} from "./Djitskra.js";
+import { djitskra } from "./Djitskra.js";
+import Node from "./node.jsx";
+
+const startNodeRow = 2;
+const startNodeCol = 2;
+
+const finishNodeRow = 19;
+const finishNodeCol = 28;
 
 class PathFindingVisualizer extends Component {
   constructor(props, context) {
     super(props, context);
-    //this.InitializingGrid = this.InitializingGrid.bind(this);
     this.visualizeDjitskra = this.visualizeDjitskra.bind(this);
     this.state = {
       grid: [],
     };
   }
 
-  componentDidMount(){
-
+  componentDidMount() {
     const grid = createGrid();
-    this.setState({grid: grid,})
+    this.setState({ grid: grid });
   }
 
+  visualizeDjitskra() {
+    const nodes = djitskra(this.state.grid, startNodeRow, startNodeCol);
+    let finishNode = {};
 
- /*  InitializingGrid() {
-    let grid = [];
-
-    for (let i = 0; i < 10; i++) {
-      let currentRow = [];
-      for (let j = 0; j < 20; j++) {
-        currentRow.push({ row:i, col:j, distance: Infinity, isVisited: false, previousNode:null, });
-      }
-
-      grid.push(currentRow);
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].isFinishNode) finishNode = nodes[i];
     }
 
-    this.setState({
-        grid:this.grid,
-    });
-  } */
+    const shortestPathNodes = printPaths(finishNode, []);
 
-  visualizeDjitskra(){
-      const nodes = djitskra(this.state.grid,0,0);
+    for (let i = 0; i < shortestPathNodes.length - 1; i++) {
+      const [rowIdx, colIdx] = shortestPathNodes[i];
 
-        for(let i=0; i<nodes.length; i++){
-            console.log("row:" +nodes[i].row +" col:"+ nodes[i].col + " distance:"+ nodes[i].distance + " "+ printPaths(nodes[i]),"");
-        }
+      setTimeout(() => {
+        document.getElementById(
+          `${rowIdx}-${colIdx}`
+        ).className = `node-shortest-path`;
+      }, i * 100);
+    }
+  }
 
-     /*  for(let i=0; i<10; i++){
-          console.log("hello");
-      } */
+ 
+  onMouseLeave(rowIdx, colIdx) {
+    document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+  }
+
+  onMouseEnter(rowIdx, colIdx) {
+    const grid = this.state.grid;
+    if(rowIdx===startNodeRow && colIdx===startNodeCol){}
+    else if(rowIdx===finishNodeRow && colIdx===finishNodeCol){}
+    else
+    {
+    grid[rowIdx][colIdx].isWall=true; document.getElementById(`${rowIdx}-${colIdx}`).className = `node-wall`;
+    }
+
+   this.setState({grid:grid})
+
+    
   }
 
   render() {
-    return <div>
-        {this.InitializingGrid}
+    return (
+      <div>
         <button onClick={this.visualizeDjitskra}>TestDjitskra</button>
-    </div>;
+
+        <div className="grid">
+          {this.state.grid.map((row, rowIdx) => {
+            return row.map((node, nodeIdx) => {
+              const { row, col, isFinishNode, isStartNode,isWall } = node;
+
+              return (
+                <Node
+                  row={row}
+                  col={col}
+                  isStartNode={isStartNode}
+                  isFinishNode={isFinishNode}
+                  isWall={isWall}
+                  onMouseEnter={(row,col)=>this.onMouseEnter(row,col)}
+                ></Node>
+              );
+            });
+          })}
+        </div>
+      </div>
+    );
   }
 }
 
-let printPaths = (nodes,paths)=>{
+let printPaths = (finishNode, shortestPathNodes) => {
+  if (finishNode.previousNode === null) {
+    return shortestPathNodes;
+  } else {
+    shortestPathNodes.unshift([finishNode.row, finishNode.col]);
+    return printPaths(finishNode.previousNode, shortestPathNodes);
+  }
+};
 
-    if(nodes.previousNode===null){
+let createGrid = () => {
+  let grid = [];
 
-        return `${nodes.row}${nodes.col}`;
+  for (let i = 0; i < 20; i++) {
+    let currentRow = [];
+    for (let j = 0; j < 50; j++) {
+      currentRow.push({
+        row: i,
+        col: j,
+        distance: Infinity,
+        isVisited: false,
+        previousNode: null,
+        isStartNode: i === startNodeRow && j === startNodeCol,
+        isFinishNode: i === finishNodeRow && j === finishNodeCol,
+        isWall:false
+      });
     }
 
-    else{
-        paths=`${nodes.row}${nodes.col}<- `
-        return paths+printPaths(nodes.previousNode,paths)
-    }
-    return paths;
-}
-
-let createGrid = ()=>{
-
-    let grid = [];
-
-    for (let i = 0; i < 4; i++) {
-      let currentRow = [];
-      for (let j = 0; j < 4; j++) {
-        currentRow.push({ row:i, col:j, distance: Infinity, isVisited: false, previousNode:null, });
-      }
-
-      grid.push(currentRow);
-    }
- 
-    for(let i=1; i<4; i++){
-        grid[0][i].isVisited=true;
-    }
-    grid[1][3].isVisited=true;
-    grid[2][3].isVisited=true; 
-    grid[3][1].isVisited=true;
-
-    return grid;
-
-
-}
+    grid.push(currentRow);
+  }
+  return grid;
+};
 
 export default PathFindingVisualizer;

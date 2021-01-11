@@ -2,8 +2,8 @@ export function djitskra(grid, rowSourceNode, colSourceNode) {
   grid[rowSourceNode][colSourceNode].distance = 0;
   let nodes = getAllNodes(grid);
 
-  console.log(grid.length);
-    console.log(grid[0].length);
+   // console.log(grid.length);
+    //console.log(grid[0].length);
 
   for (let i = 0; i < nodes.length; i++) {
 
@@ -13,7 +13,7 @@ export function djitskra(grid, rowSourceNode, colSourceNode) {
 
     if(u===Infinity) continue;
 
-    console.log("Idx: "+ u);
+   // console.log("Idx: "+ u);
 
     const currentNode = nodes[u];
     grid[currentNode.row][currentNode.col].isVisited=true;
@@ -49,7 +49,7 @@ export function djitskra(grid, rowSourceNode, colSourceNode) {
 let updateDistance = (adjacentNode, currentNode, grid) => {
   if (
     currentNode.distance + 1 < adjacentNode.distance &&
-    adjacentNode.isVisited === false
+    adjacentNode.isVisited === false && adjacentNode.isWall===false
   ) {
     grid[adjacentNode.row][adjacentNode.col].distance =
       parseInt(currentNode.distance + 1);
@@ -63,7 +63,7 @@ let minDistance = (nodes) => {
 
   for(let i=0; i<nodes.length; i++){
     let nodeDistance = nodes[i].distance;
-    if (nodeDistance<= min && nodes[i].isVisited === false) {
+    if (nodeDistance<= min && nodes[i].isVisited === false && nodes[i].isWall===false) {
         min = nodes[i].distance;
         minIndex = i;
       }

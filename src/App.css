@@ -1,9 +1,9 @@
-.node{
-  position:absolute;
-  top:10px;
-  height:100px;
-  width:100px;
-  left:100px;
-  border-color: black;
-  background-color: red;
+.grid {
+  margin: 0 370px;
+
+}
+
+.container{
+ width:2000px;
+
 }
