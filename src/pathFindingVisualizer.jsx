@@ -48,7 +48,7 @@ class PathFindingVisualizer extends Component {
     document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
   }
 
-  onMouseEnter(rowIdx, colIdx) {
+  onMouseDown(rowIdx, colIdx) {
     const grid = this.state.grid;
     if(rowIdx===startNodeRow && colIdx===startNodeCol){}
     else if(rowIdx===finishNodeRow && colIdx===finishNodeCol){}
@@ -79,7 +79,7 @@ class PathFindingVisualizer extends Component {
                   isStartNode={isStartNode}
                   isFinishNode={isFinishNode}
                   isWall={isWall}
-                  onMouseEnter={(row,col)=>this.onMouseEnter(row,col)}
+                  onMouseDown={(row,col)=>this.onMouseDown(row,col)}
                 ></Node>
               );
             });
