@@ -1,1 +1,1 @@
-# DjitskraPathFindingVisualizer
+# DijkstraPathFindingVisualizer
