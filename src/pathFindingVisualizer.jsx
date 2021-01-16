@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { djitskra } from "./Djitskra.js";
 import Node from "./node.jsx";
 
-const startNodeRow = 2;
-const startNodeCol = 2;
+let startNodeRow = 2;
+let startNodeCol = 2;
 
-const finishNodeRow = 19;
-const finishNodeCol = 28;
+let finishNodeRow = 19;
+let finishNodeCol = 28;
 
 class PathFindingVisualizer extends Component {
   constructor(props, context) {
@@ -14,10 +14,15 @@ class PathFindingVisualizer extends Component {
     this.visualizeDjitskra = this.visualizeDjitskra.bind(this);
     this.state = {
       grid: [],
+      mouseIsDown: false,
+      movingFinish:false,
+      movingStart:false,
+      modalShow :true,
     };
   }
 
   componentDidMount() {
+    
     const grid = createGrid();
     this.setState({ grid: grid });
   }
@@ -29,6 +34,7 @@ class PathFindingVisualizer extends Component {
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].isFinishNode) finishNode = nodes[i];
     }
+    console.log("vd" + finishNode.row+ " "+ finishNode.col);
 
     const shortestPathNodes = printPaths(finishNode, []);
 
@@ -43,21 +49,85 @@ class PathFindingVisualizer extends Component {
     }
   }
 
+  onMouseUp(rowIdx,colIdx){
+
+    const grid = this.state.grid;
+    if(this.state.movingFinish){
+      finishNodeRow=rowIdx;
+      finishNodeCol=colIdx;
+      document.getElementById(`${rowIdx}-${colIdx}`).className='node-finish';
+      grid[rowIdx][colIdx].isFinishNode=true;
+    }
+    else if(this.state.movingStart){
+      startNodeRow=rowIdx;
+      startNodeCol=colIdx;
+      document.getElementById(`${rowIdx}-${colIdx}`).className='node-start';
+      grid[rowIdx][colIdx].isStartNode=true;
+
+    }
+    this.setState({grid:grid,mouseIsDown:false,movingFinish:false,movingStart:false});
+  
+
+  }
+
+  onMouseLeave(rowIdx,colIdx){
+    if(document.getElementById(`${rowIdx}-${colIdx}`).className === `node-finish` && this.state.mouseIsDown&& this.state.movingFinish){
+      document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+    }
+    else if(document.getElementById(`${rowIdx}-${colIdx}`).className === `node-start` && this.state.mouseIsDown&& this.state.movingStart){
+      document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+
+    }
+  }
+
+
  
-  onMouseLeave(rowIdx, colIdx) {
-    document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+  onMouseEnter(rowIdx, colIdx) {
+    const grid = this.state.grid;
+    if(rowIdx===startNodeRow && colIdx===startNodeCol){}
+    else if(rowIdx===finishNodeRow && colIdx===finishNodeCol){}
+    else if(this.state.movingFinish && this.state.mouseIsDown){
+      document.getElementById(`${rowIdx}-${colIdx}`).className = `node-finish`;
+
+    }
+    else if(this.state.mouseIsDown &&this.state.movingStart ){
+      document.getElementById(`${rowIdx}-${colIdx}`).className = `node-start`;
+
+    }
+    else if(this.state.mouseIsDown)
+    {
+    grid[rowIdx][colIdx].isWall=true; document.getElementById(`${rowIdx}-${colIdx}`).className = `node-wall`;
+    }
+    
+
+   this.setState({grid:grid})
   }
 
   onMouseDown(rowIdx, colIdx) {
     const grid = this.state.grid;
-    if(rowIdx===startNodeRow && colIdx===startNodeCol){}
-    else if(rowIdx===finishNodeRow && colIdx===finishNodeCol){}
-    else
+
+    if(rowIdx===startNodeRow && colIdx===startNodeCol){
+      document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+      grid[rowIdx][colIdx].isStartNode=false;
+      this.setState({grid:grid,movingStart:true,mouseIsDown:true})
+
+    }
+    else if(rowIdx===finishNodeRow && colIdx===finishNodeCol){
+      document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+      grid[rowIdx][colIdx].isFinishNode=false;
+      this.setState({grid:grid,movingFinish:true,mouseIsDown:true})
+    }
+    else if(document.getElementById(`${rowIdx}-${colIdx}`).className === `node`)
     {
     grid[rowIdx][colIdx].isWall=true; document.getElementById(`${rowIdx}-${colIdx}`).className = `node-wall`;
+    this.setState({grid:grid,mouseIsDown:true})
+    }
+    else{
+      grid[rowIdx][colIdx].isWall=false; document.getElementById(`${rowIdx}-${colIdx}`).className = `node`;
+      this.setState({grid:grid,mouseIsDown:true})
+
     }
 
-   this.setState({grid:grid})
 
     
   }
@@ -65,7 +135,9 @@ class PathFindingVisualizer extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.visualizeDjitskra}>TestDjitskra</button>
+        <div>
+        <button className="button" onClick={this.visualizeDjitskra}>Visualize!</button>
+        </div>
 
         <div className="grid">
           {this.state.grid.map((row, rowIdx) => {
@@ -80,6 +152,9 @@ class PathFindingVisualizer extends Component {
                   isFinishNode={isFinishNode}
                   isWall={isWall}
                   onMouseDown={(row,col)=>this.onMouseDown(row,col)}
+                  onMouseEnter={(row,col)=>{this.onMouseEnter(row,col)}}
+                  onMouseUp={(row,col)=>{this.onMouseUp(row,col)}}
+                  onMouseLeave={(row,col)=>this.onMouseLeave(row,col)}
                 ></Node>
               );
             });

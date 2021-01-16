@@ -1,25 +1,26 @@
 .node{
-  width: 25px;
-  height: 25px;
+  width: 3vh;
+  height: 3vh;
   outline: 1px solid  rgb(47, 103, 160);
   display: inline-block;
-    
+  
   }
 .node-wall{
 
-  width: 25px;
-  height: 25px;
+  width: 3vh;
+  height:3vh;
   outline: 1px solid rgb(47, 103, 160);
   display: inline-block;
   background-color: black;
+  
 
 
 }
 
 .node-start{
 
-  width: 25px;
-  height: 25px;
+  width: 3vh;
+  height: 3vh;
   outline: 1px solid rgb(47, 103, 160);
   display: inline-block;
   background-color:red;
@@ -28,24 +29,24 @@
 }
 
 .node-finish{
-  width: 25px;
-  height: 25px;
+  width: 3vh;
+  height: 3vh;
   outline: 1px solid rgb(47, 103, 160);
   display: inline-block;
   background-color: green;
 
 }
 .node-shortest-path{
-  width: 25px;
-  height: 25px;
+  width: 3vh;
+  height: 3vh;
   outline: 1px solid rgb(47, 103, 160);
   display: inline-block;
   background-color: rgb(99, 22, 223);
 
 }
 .node-wall{
-  width: 25px;
-  height: 25px;
+  width: 3vh;
+  height: 3vh;
   outline: 1px solid rgb(47, 103, 160);
   display: inline-block;
   background-color:black;

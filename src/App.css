@@ -1,9 +1,13 @@
 .grid {
-  margin: 0 370px;
+  margin: auto;
+  margin-top:20vh;
+  width:150vh;
 
 }
+.button{
 
-.container{
- width:2000px;
-
+  margin: 0;
+  position: absolute;
+  left: 47%;
+  top:10%;
 }

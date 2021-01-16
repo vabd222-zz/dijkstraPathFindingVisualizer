@@ -11,12 +11,15 @@ class Node extends Component {
             isStartNode,
             isFinishNode,
             isWall,
-            onMouseDown
+            onMouseDown,
+            onMouseEnter,
+            onMouseUp,
+            onMouseLeave
         }=this.props;
 
         const className = isStartNode ? 'node-start' : (isFinishNode ? 'node-finish': (isWall?'node-wall':'node'));
         return (
-           <div id={`${row}-${col}`} className={className} onMouseDown={()=>{onMouseDown(row,col)}}></div>
+           <div id={`${row}-${col}`} className={className} onMouseDown={()=>{onMouseDown(row,col)}} onMouseEnter={()=>{onMouseEnter(row,col)}} onMouseUp={()=>{onMouseUp(row,col)}} onMouseLeave={()=>{onMouseLeave(row,col)}}></div>
         );
     }
 }
